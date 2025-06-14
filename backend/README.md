@@ -51,7 +51,7 @@ docker run -d \
    docker exec -it mongo-corpflow mongosh -u admin -p admin123
    ```
 
-2. Execute o script abaixo para criar o banco `corpFlow` e as collections:
+2. Execute o script abaixo para criar o banco `corpFlow` e as collections users, flows e tasks:
 
    ```javascript
    use corpFlow;
@@ -114,7 +114,7 @@ backend/
 
 - Node.js
 - Express
-- MongoDB (Mongoose)
+- MongoDB
 - JWT para autenticação
 
 ## Observações
@@ -122,9 +122,4 @@ backend/
 - O projeto utiliza autenticação JWT. O token é salvo no `localStorage` pelo frontend após o login.
 - Para acessar funcionalidades de gerente ou colaborador, utilize um usuário com o respectivo papel.
 - Ajuste as collections e campos conforme a necessidade do seu projeto.
-
-## Contato
-
-Dúvidas ou sugestões? Abra uma issue ou entre em contato com o mantenedor do projeto.
-
----
+- Usuarios do tipo gerente devem ser criados diretamente no banco de dados.
