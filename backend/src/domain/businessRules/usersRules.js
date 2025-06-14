@@ -15,6 +15,9 @@ export async function createUser(userInfo) {
     if (userOnDb != null) {
       return { error: "Usuario já existe", status: 409 };
     }
+    if (!userInfo.role || (userInfo.role !== "gerente" && userInfo.role !== "Gerente")) {
+      userInfo.role = "colaborador";
+    }
 
     userInfo.id = uuidv4();
     userInfo.password = await bcrypt.hash(userInfo.password, 10);

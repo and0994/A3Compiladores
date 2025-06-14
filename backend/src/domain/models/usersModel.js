@@ -7,12 +7,12 @@ export const userSchema = Joi.object({
     name: Joi.string().min(3).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
-    role: Joi.string().valid('Gerente', 'Colaborador').required(),
+    role: Joi.string().valid('gerente', 'colaborador').required(),
   });
 
 export const updateUserRuleSchema = Joi.object({
   email: Joi.string().email().required(),
-  role: Joi.string().valid('Gerente', 'Colaborador').required(),
+  role: Joi.string().valid('gerente', 'colaborador').required(),
 });
 
 export const userInfoSchema = Joi.object({
