@@ -1,33 +1,18 @@
-# A3Compiladores - Backend
+# A3Compiladores - Full Stack (Backend + Frontend)
 
-Este projeto utiliza MongoDB como banco de dados. Siga as instruções abaixo para criar uma instância MongoDB usando Docker e preparar o banco de dados **corpFlow** com as collections necessárias.
+Este repositório contém o **backend** (Node.js + Express + MongoDB) e o **frontend** (ReactJS) do projeto A3Compiladores, uma aplicação para gerenciamento de usuários, fluxos e tarefas.
+
+---
 
 ## Pré-requisitos
 
-- [Docker](https://www.docker.com/get-started) instalado
-- Node.js (versão 16 ou superior)
-- npm ou yarn
+- [Node.js](https://nodejs.org/) (versão 16 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+- [Docker](https://www.docker.com/get-started) (para rodar o MongoDB facilmente)
 
-## Instalação
+---
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/A3Compiladores.git
-   ```
-2. Acesse a pasta do backend:
-   ```bash
-   cd A3Compiladores/backend
-   ```
-3. Instale as dependências:
-   ```bash
-   npm install
-   ```
-   ou
-   ```bash
-   yarn
-   ```
-
-## Subindo o MongoDB com Docker
+## 1. Subindo o MongoDB com Docker
 
 Execute o comando abaixo para criar e iniciar um container MongoDB chamado `mongo-corpflow`:
 
@@ -35,24 +20,20 @@ Execute o comando abaixo para criar e iniciar um container MongoDB chamado `mong
 docker run -d \
   --name mongo-corpflow \
   -p 27017:27017 \
-  -e MONGO_INITDB_ROOT_USERNAME=admin \
-  -e MONGO_INITDB_ROOT_PASSWORD=admin123 \
+  -e MONGO_INITDB_ROOT_USERNAME=root \
+  -e MONGO_INITDB_ROOT_PASSWORD=123 \
   mongo:latest
 ```
 
-- O MongoDB ficará acessível em `mongodb://admin:admin123@localhost:27017/`
-- Altere usuário e senha se desejar.
+O MongoDB ficará acessível em `mongodb://root:123@localhost:27017/`
 
-## Criando o banco de dados e as collections
+Criando o banco e as collections no MongoDB
 
-1. Abra o terminal do MongoDB (Mongo Shell) no container:
-
+1. Acesse o terminal do MongoDB no container:
    ```bash
-   docker exec -it mongo-corpflow mongosh -u admin -p admin123
+   docker exec -it mongo-corpflow mongosh -u root -p 123
    ```
-
-2. Execute o script abaixo para criar o banco `corpFlow` e as collections users, flows e tasks:
-
+2. Execute o script abaixo para criar o banco `corpFlow` e as collections, users, flows e tasks:
    ```javascript
    use corpFlow;
 
@@ -71,59 +52,92 @@ docker run -d \
    show collections;
    ```
 
-## Configuração de Ambiente
+---
 
-- Crie um arquivo `.env` na raiz do backend com as variáveis de ambiente necessárias, por exemplo:
+## 2. Configurando o Backend
 
-   ```
-   MONGO_URI=mongodb://admin:admin123@localhost:27017/corpFlow
-   JWT_SECRET=sua_chave_secreta
-   PORT=5000
-   ```
+### a) Variáveis de Ambiente
 
-- Certifique-se de que o backend está configurado para acessar o MongoDB em `mongodb://admin:admin123@localhost:27017/corpFlow`.
-
-## Scripts Disponíveis
-
-- `npm start` ou `yarn start`  
-  Inicia o servidor backend.
-
-- `npm run dev` ou `yarn dev`  
-  Inicia o servidor em modo de desenvolvimento (com nodemon).
-
-- `npm test` ou `yarn test`  
-  Executa os testes automatizados.
-
-## Estrutura do Projeto
+Crie um arquivo `.env` dentro da pasta `backend` com o seguinte conteúdo:
 
 ```
-backend/
-├── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── app.js
-│   └── server.js
-├── package.json
-├── .env
+PORT=3000
+MONGO_HOST=localhost
+MONGO_USERNAME=root
+MONGO_PASSWORD=123
+MONGO_URI=mongodb://root:123@localhost:27017/?authSource=admin
+JWT_SECRET=sua_chave_secreta_aqui
+```
+
+### b) Instalação e Execução
+
+1. Acesse a pasta do backend:
+   ```bash
+   cd backend
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor:
+   ```bash
+   npm start
+   ```
+   O backend estará rodando em [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 3. Configurando o Frontend
+
+1. Abra um novo terminal e acesse a pasta do frontend:
+   ```bash
+   cd frontend
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm start
+   ```
+   O frontend estará rodando em [http://localhost:3000](http://localhost:3000)  
+   > Se as portas coincidirem, altere a porta do frontend no arquivo `.env` ou no script de inicialização.
+
+---
+
+## 5. Estrutura do Projeto
+
+```
+A3Compiladores/
+├── backend/
+│   ├── src/
+│   ├── .env
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   └── package.json
 └── README.md
 ```
 
-## Tecnologias Utilizadas
+---
 
-- Node.js
-- Express
-- MongoDB
-- JWT para autenticação
+## 6. Observações
 
-## Observações
-
-- O projeto utiliza autenticação JWT. O token é salvo no `localStorage` pelo frontend após o login.
+- O backend utiliza autenticação JWT. O token é salvo no `localStorage` pelo frontend após o login.
 - Para acessar funcionalidades de gerente ou colaborador, utilize um usuário com o respectivo papel.
-- Ajuste as collections e campos conforme a necessidade do seu projeto.
-- Usuarios do tipo gerente devem ser criados diretamente no banco de dados.
+- Certifique-se de que o backend está rodando antes de acessar o frontend.
+- Para rotas protegidas, envie o token JWT no header `Authorization: Bearer <token>`.
+- Usuario do tipo gerente não consegue criar login pelo frontend, adicionar diretamente no banco
 
+---
+
+## 7. Tecnologias Utilizadas
+
+- **Backend:** Node.js, Express, MongoDB, JWT, Joi, dotenv
+- **Frontend:** ReactJS, TailwindCSS, Axios, React Router DOM
+
+---
 
 ## Regras de criação de fluxos e tarefas
 Ordem dos Blocos
